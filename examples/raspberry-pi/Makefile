@@ -8,6 +8,7 @@ sht4x_release_name = raspberry-pi-i2c-sht4x-${sht4x_version}
 sht4x_tarball = ${sht4x_release_name}.tar.gz
 algorithm_dir = ../../sensirion_gas_index_algorithm
 algorithm_sources = sensirion_gas_index_algorithm.c
+library_sources = library.c
 
 LDFLAGS = -lm
 CFLAGS = -Os -Wall -fstrict-aliasing -Wstrict-aliasing=1 -Wsign-conversion -fPIC -I.
@@ -42,6 +43,10 @@ algorithm_example_usage:
 low_power_example:
 	$(CC) $(CFLAGS) -o $@ ${driver_common_sources} ${sgp40_sources} ${sht4x_sources} ${algorithm_sources} low_power_example.c $(LDFLAGS)
 
+gas_index_algorithm_lib:
+	$(CC) $(CFLAGS) -I${algorithm_dir} -shared -o $@.so ../../sensirion_gas_index_algorithm/sensirion_gas_index_algorithm.c ${library_sources} $(LDFLAGS)
+
 clean:
 	$(RM) algorithm_example_usage
 	$(RM) low_power_example
+	$(RM) algorithm_library
